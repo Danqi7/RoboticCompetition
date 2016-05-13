@@ -4,16 +4,22 @@ void setup() {
 
   //directoin digital: A,B 
   pinMode(2,OUTPUT);
-  pinMode(3,OUTPUT);
-
-  //speed analog: A,B
   pinMode(4,OUTPUT);
+
+  //speed analog for R,L wheels
+  pinMode(3,OUTPUT);
   pinMode(5,OUTPUT)
 }
 
 #define thSensor 100
 #define thLight 40
 #define interval 5000
+#define speedL 80
+#define sppedR 80
+#define middle 80
+#define fast 170
+#define slow 50
+
 unsigned long prev = 0; //the start time when the car begins to spin 
 
 class RoboticCar
@@ -33,50 +39,66 @@ class RoboticCar
   int lightB;
   
   //bump
-  bumpA1;
-  bumpA2;
-  bumpB1;
-  bumpB2;
+//  bumpA1;
+//  bumpA2;
+//  bumpB1;
+//  bumpB2;
   
     int counter = 0;
     char direct = 'A';
 
     void moveA()
     {
-
+      digitalWrite(2,HIGH);
+      digitalWrite(4,HIGH);
+      analogWrite(3,speedR);
+      analogWrite(5,speedL);    
     }
 
     void moveB()
     {
-
+      digitalWrite(2,LOW);
+      digitalWrite(4,LOW);
+      analogWrite(3,speedL);
+      analogWrite(5,speedR);    
     }
 
     void ccwA()
     {
-      
+      digitalWrite(2,HIGH);
+      digitalWrite(4,HIGH);
+      analogWrite(3,fast);
+      analogWrite(5,middle);   
     }
     void cwA()
     {
-      
+      digitalWrite(2,HIGH);
+      digitalWrite(4,HIGH);
+      analogWrite(3,middle);
+      analogWrite(5,fast);    
     }
     void ccwB()
     {
-      
+      digitalWrite(2,LOW);
+      digitalWrite(4,LOW);
+      analogWrite(3,middle);
+      analogWrite(5,fast);    
     }
     void cwB()
     {
-      digitalWrite(pin1, High);
-      delayMicroseconds(1000)
+      digitalWrite(2,LOW);
+      digitalWrite(4,LOW);
+      analogWrite(3,fast);
+      analogWrite(5,middle);    
     }
-
-    void stopMotion()
-    {
-      
-    }
-
+    
     void spin()
     {
-        
+       digitalWrite(2,LOW);
+       digitalWrite(4,HIGH);
+       analogWrite(3,middle);
+       analogWrite(5,middle);   
+                   
     }
 
     void clockwise()
@@ -178,74 +200,87 @@ void loop() {
     // put your main code here, to run repeatedly
     
     //read input
-    ourCar.sensorA1 = analogRead(A0);
-    ourCar.sensorA2 = analogRead(A1);
-    ourCar.sensorB1 = analogRead(A2);
-    ourCar.sensorB2 = analogRead(A3); 
+//    ourCar.sensorA1 = analogRead(A0);
+//    ourCar.sensorA2 = analogRead(A1);
+//    ourCar.sensorB1 = analogRead(A2);
+//    ourCar.sensorB2 = analogRead(A3); 
 
     ourCar.lightA = analogRead(A4);
     ourCar.lightB = analogRead(A5);
 
     //assign input to local vars
-    int sensorA1 = ourCar.sensorA1;
-    int sensorA2 = ourCar.sensorA2;
-    int sensorB1 = ourCar.sensorB1;
-    int sensorB2 = ourCar.sensorB2;
-    int lightA = ourCar.lightA;
-    int lightB = ourCar.lightB;
+//    int sensorA1 = ourCar.sensorA1;
+//    int sensorA2 = ourCar.sensorA2;
+//    int sensorB1 = ourCar.sensorB1;
+//    int sensorB2 = ourCar.sensorB2;
+//    int lightA = ourCar.lightA;
+//    int lightB = ourCar.lightB;
     
-    unsigned long current = millis();//get current time
-
-    //while we are running within the boundary
-    while (lightA < thLight && lightB < thLight )
-    {
-      ourCar.avoidObstacle();
-      //target detected
-      if (sensorA1 >= thSensor || sensorA2 >= thSensor || sensorB1 >= thSensor || sensorB2 >= thSensor)
-      {
-        ourCar.lost = 0;
-        if (sensorA1 >= thSensor || sensorA2 >= thSensor) 
-        {
-            ourCar.direct = 'A';
-            ourCar.movePositive();
-        }
-        else if (sensorB1 >= thSensor || sensorB2 >= thSensor)
-        {
-            ourCar.direct = 'B';
-            ourCar.movePositive();
-        }
-
-      }
-      //if target is NOT detected
-      else if (sensorA1 < thSensor && sensor A2 < thSensor && sensorB1 < thSensor && sensorB2 < thSensor)
-      {
-          if (ourCar.lost == 0)
-          {
-              prev = current;
-              ourCar.lost = 1;
-          }  
-          if (current - prev < interval)
-          {
-            ourCar.spin();    
-          }
-          else //spin more than 5 sec
-          {
-            ourCar.lost = 0;
-            movePositive();
-          }
-      }
-
-    }
+//    unsigned long current = millis();//get current time
+//
+//    //while we are running within the boundary
+//    while (lightA < thLight && lightB < thLight )
+//    {
+//      ourCar.avoidObstacle();
+//      //target detected
+//      if (sensorA1 >= thSensor || sensorA2 >= thSensor || sensorB1 >= thSensor || sensorB2 >= thSensor)
+//      {
+//        ourCar.lost = 0;
+//        if (sensorA1 >= thSensor || sensorA2 >= thSensor) 
+//        {
+//            ourCar.direct = 'A';
+//            ourCar.movePositive();
+//        }
+//        else if (sensorB1 >= thSensor || sensorB2 >= thSensor)
+//        {
+//            ourCar.direct = 'B';
+//            ourCar.movePositive();
+//        }
+//
+//      }
+//      //if target is NOT detected
+//      else if (sensorA1 < thSensor && sensor A2 < thSensor && sensorB1 < thSensor && sensorB2 < thSensor)
+//      {
+//          if (ourCar.lost == 0)
+//          {
+//              prev = current;
+//              ourCar.lost = 1;
+//          }  
+//          if (current - prev < interval)
+//          {
+//            ourCar.spin();    
+//          }
+//          else //spin more than 5 sec
+//          {
+//            ourCar.lost = 0;
+//            movePositive();
+//          }
+//      }
+//
+//    }
 
     //running into the boundary
     while (lightA <= thLight && lightB > thLight) {
-        ourCar.counterclockwise()
+         ourCar.sensorB1 = analogRead(A2);
+         ourCar.sensorB2 = analogRead(A3);
+         int lightA = ourCar.lightA; 
+         int lightB = ourCar.lightB;
+ 
+         ourCar.counterclockwise()
     }
     while (light1 <= thLight && light2 <= thLight) {
-        ourCar.moveOpposite()
+         ourCar.sensorB1 = analogRead(A2);
+         ourCar.sensorB2 = analogRead(A3);
+         lightA = ourCar.lightA; 
+         lightB = ourCar.lightB;
+         ourCar.moveOpposite()
     }
     while ((light1 > threshold && light2 <= threshold) {
-        ourCar.clockwise()
+         ourCar.sensorB1 = analogRead(A2);
+         ourCar.sensorB2 = analogRead(A3);
+         lightA = ourCar.lightA; 
+         lightB = ourCar.lightB;
+         ourCar.clockwise()
     }
 
 }

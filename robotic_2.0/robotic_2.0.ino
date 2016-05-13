@@ -32,10 +32,10 @@ class RoboticCar
   int lightB;
   
   //bump
-  bumpA1;
-  bumpA2;
-  bumpB1;
-  bumpB2;
+//  bumpA1;
+//  bumpA2;
+//  bumpB1;
+//  bumpB2;
   
     int counter = 0;
     char direct = 'A';
