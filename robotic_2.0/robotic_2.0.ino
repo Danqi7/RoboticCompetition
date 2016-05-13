@@ -78,7 +78,7 @@ class RoboticCar
       
     }
 
-    void clockwise() //turn 90 degrees
+    void clockwise()
     {
       if direct == 'A':
         cwA();
@@ -172,7 +172,7 @@ class RoboticCar
 #define thSensor 20
 #define thLight 20
 #define interval 5000
-unsigned long prev = 0;
+unsigned long prev = 0; //the start time when the car begins to spin 
 
 
 RoboticCar ourCar;
@@ -206,25 +206,28 @@ void loop() {
       //if target is NOT detected
       else if (sensorA1 < thSensor && sensor A2 < thSensor && sensorB1 < thSensor && sensorB2 < thSensor)
       {
-          if (current - prev < interval) 
-            
-            ourCar.spinCheck();
+          if (current - prev < interval)
+          {
+            ourCar.spin();    
+          }
           else //spin more than 5 sec
+          { 
             prev = current;
             movePositive();
+          }
       }
 
     }
 
     //running into the boundary
     while (lightA >= thLight && lightB < thLight) {
-      ourCar.counterclockwise()
+        ourCar.counterclockwise()
     }
     while (light1 >= thLight && light2 >= thLight) {
-      ourCar.moveOpposite()
+        ourCar.moveOpposite()
     }
     while ((light1 < threshold && light2 >= threshold) {
-      ourCar.clockwise()
+        ourCar.clockwise()
     }
 
 }
