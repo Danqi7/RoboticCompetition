@@ -238,91 +238,19 @@ void loop() {
   //    int lightB = ourCar.lightB;
 
   unsigned long current = millis();//get current time
+//
+//  if (cnt == 0)
+//    ourCar.spin();
+//
+//  if (cnt > 5000)
+//  {
+//    ourCar.movePositive();
+//    Serial.println("STOP~~~~~~~~~~~~~~~~~~~");
+//  }
+  
 
-  //while we are running within the boundary
-  //      if (lightA < thLight && lightB < thLight )
-  //      {
-  //ourCar.avoidObstacle();
-  //target detected
-  Serial.println("running inside the boundary");
-  if (sensorA1 >= thSensor || sensorA2 >= thSensor || sensorB1 >= thSensor || sensorB2 >= thSensor)
-  {
-    Serial.println("TARGET MODE");
-    ourCar.lost = 0;
-    if (sensorA1 >= thSensor || sensorA2 >= thSensor)
-    {
-      ourCar.direct = 'A';
-      ourCar.movePositive();
-    }
-    else if (sensorB1 >= thSensor || sensorB2 >= thSensor)
-    {
-      ourCar.direct = 'B';
-      ourCar.movePositive();
-    }
+  
 
-  }
-  //if target is NOT detected
-  else if (sensorA1 < thSensor && sensorA2 < thSensor && sensorB1 < thSensor && sensorB2 < thSensor)
-  {
-    ourCar.movePositive();
-    Serial.println("LOST MODE");
-    if (ourCar.lost == 0)
-    {
-      prev = current;
-      ourCar.lost = 1;
-      //ourCar.spin();
-      //Serial.println("WE ARE SPINNING");
-    }
-    
-//    if (current - prev < interval)
-//    {
-          ourCar.spin();
-//          delay(800);
-//    }
-
-    if (current - prev > interval)//spin more than 5 sec
-    {
-      Serial.println("MORE THAN 5 SEC~~~~~~~~~~~~");
-      ourCar.lost = 0;
-      ourCar.movePositive();
-      delay(50);
-    }
-  }
-
-  //      }
-
-  //
-  //  //running into the boundary
-  //  while (lightA <= thLight && lightB > thLight)
-  //  {
-  //    //         Serial.print("Mode1");
-  //    ourCar.lightA = analogRead(A4);
-  //    ourCar.lightB = analogRead(A5);
-  //    lightA = ourCar.lightA;
-  //    lightB = ourCar.lightB;
-  //    ourCar.clockwise();
-  //    delay(1000);
-  //  }
-  //  while (lightA <= thLight && lightB <= thLight)
-  //  {
-  //    //         Serial.print("REVERSE");
-  //    ourCar.lightA = analogRead(A4);
-  //    ourCar.lightB = analogRead(A5);
-  //
-  //    lightA = ourCar.lightA;
-  //    lightB = ourCar.lightB;
-  //    ourCar.moveOpposite();
-  //    delay(1000);
-  //  }
-  //
-  //  while (lightA > thLight && lightB <= thLight)
-  //  {
-  //    ourCar.lightA = analogRead(A4);
-  //    ourCar.lightB = analogRead(A5);
-  //    lightA = ourCar.lightA;
-  //    lightB = ourCar.lightB;
-  //    ourCar.counterclockwise();
-  //  }
 
 }
 
