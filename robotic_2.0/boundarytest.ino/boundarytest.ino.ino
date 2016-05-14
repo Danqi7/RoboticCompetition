@@ -12,9 +12,10 @@ void setup() {
 }
 
 #define thSensor 100
-#define thLight 86
+int thLightA;
+int thLightB;
 #define interval 5000
-#define speedL 80
+#define speedL 87
 #define speedR 80
 #define middle 60
 #define fast 170
@@ -62,8 +63,8 @@ class RoboticCar
       //      Serial.print("MoveB");
       digitalWrite(2, LOW);
       digitalWrite(4, LOW);
-      analogWrite(3, speedL);
-      analogWrite(5, speedR);
+      analogWrite(3, speedR);
+      analogWrite(5, speedL);
     }
 
     void ccwA()
@@ -183,7 +184,16 @@ RoboticCar ourCar;
 
 void loop() {
   // put your main code here, to run repeatedly
-
+  if (cnt == 0)
+  {
+    thLightA = analogRead(A4) + 15;
+    thLightB = analogRead(A5) + 15;
+  }
+  
+//  Serial.println("!@#$%^&*thresholdA:");
+//  Serial.println(thLightA);
+//  Serial.println("!@#$%^&*thresholdB:");
+//  Serial.println(thLightB);
 
   //read input
   Serial.println("LOOP NUMBER:");
@@ -196,8 +206,8 @@ void loop() {
   ourCar.sensorA2 = analogRead(A1);
   ourCar.sensorB1 = analogRead(A2);
   ourCar.sensorB2 = analogRead(A3);
-  Serial.println("B2:");
-  Serial.println(ourCar.sensorB2);
+//  Serial.println("B2:");
+//  Serial.println(ourCar.sensorB2);
 
 
   ourCar.lightA = analogRead(A4);
@@ -206,7 +216,12 @@ void loop() {
   int lightA = ourCar.lightA;
   int lightB = ourCar.lightB;
 
-  ourCar.movePositive();
+//  Serial.println("LIGHT-A:");
+//  Serial.println(lightA);
+//  Serial.println("LIGHT-B:");
+//  Serial.println(lightB);
+
+   ourCar.movePositive();
   //Serial.println(ourCar.direct);
 
 
@@ -220,12 +235,12 @@ void loop() {
   int sensorA2 = ourCar.sensorA2;
   int sensorB1 = ourCar.sensorB1;
   int sensorB2 = ourCar.sensorB2;
-  Serial.println("A1:");
-  Serial.println(ourCar.sensorA1);
-  Serial.println("A2:");
-  Serial.println(ourCar.sensorA2);
-  Serial.println("B1:");
-  Serial.println(ourCar.sensorB1);
+//  Serial.println("A1:");
+//  Serial.println(ourCar.sensorA1);
+//  Serial.println("A2:");
+//  Serial.println(ourCar.sensorA2);
+//  Serial.println("B1:");
+//  Serial.println(ourCar.sensorB1);
   //
   //
   //    Serial.println("Lost Value:");
@@ -240,89 +255,73 @@ void loop() {
   unsigned long current = millis();//get current time
 
   //while we are running within the boundary
-  //      if (lightA < thLight && lightB < thLight )
-  //      {
-  //ourCar.avoidObstacle();
-  //target detected
-  Serial.println("running inside the boundary");
-  if (sensorA1 >= thSensor || sensorA2 >= thSensor || sensorB1 >= thSensor || sensorB2 >= thSensor)
+  if (lightA < thLightA && lightB < thLightB )
   {
-    Serial.println("TARGET MODE");
-    ourCar.lost = 0;
-    if (sensorA1 >= thSensor || sensorA2 >= thSensor)
+    //ourCar.avoidObstacle();
+    //target detected
+    Serial.println("running inside the boundary");
+    if (sensorA1 >= thSensor || sensorA2 >= thSensor || sensorB1 >= thSensor || sensorB2 >= thSensor)
     {
-      ourCar.direct = 'A';
-      ourCar.movePositive();
-    }
-    else if (sensorB1 >= thSensor || sensorB2 >= thSensor)
-    {
-      ourCar.direct = 'B';
-      ourCar.movePositive();
-    }
-
-  }
-  //if target is NOT detected
-  else if (sensorA1 < thSensor && sensorA2 < thSensor && sensorB1 < thSensor && sensorB2 < thSensor)
-  {
-    ourCar.movePositive();
-    Serial.println("LOST MODE");
-    if (ourCar.lost == 0)
-    {
-      prev = current;
-      ourCar.lost = 1;
-      //ourCar.spin();
-      //Serial.println("WE ARE SPINNING");
-    }
-    
-//    if (current - prev < interval)
-//    {
-          ourCar.spin();
-//          delay(800);
-//    }
-
-    if (current - prev > interval)//spin more than 5 sec
-    {
-      Serial.println("MORE THAN 5 SEC~~~~~~~~~~~~");
+      Serial.println("TARGET MODE");
       ourCar.lost = 0;
+      if (sensorA1 >= thSensor || sensorA2 >= thSensor)
+      {
+        ourCar.direct = 'A';
+        ourCar.movePositive();
+      }
+      else if (sensorB1 >= thSensor || sensorB2 >= thSensor)
+      {
+        ourCar.direct = 'B';
+        ourCar.movePositive();
+      }
+    
+    }
+    //if target is NOT detected
+    else if (sensorA1 < thSensor && sensorA2 < thSensor && sensorB1 < thSensor && sensorB2 < thSensor)
+    {
       ourCar.movePositive();
-      delay(50);
+      Serial.println("LOST MODE");
+      if (ourCar.lost == 0)
+      {
+        prev = current;
+        ourCar.lost = 1;
+      }
+//      if (current - prev < interval)
+//      {
+//          ourCar.spin();
+//    //        delay(800);
+//      }
+      ourCar.spin();
+      if (current - prev > interval)//spin more than 5 sec
+      {
+        Serial.println("MORE THAN 5 SEC~~~~~~~~~~~~");
+        ourCar.lost = 0;
+        ourCar.movePositive();
+        delay(50);
+      }
     }
   }
 
-  //      }
-
-  //
-  //  //running into the boundary
-  //  while (lightA <= thLight && lightB > thLight)
-  //  {
-  //    //         Serial.print("Mode1");
-  //    ourCar.lightA = analogRead(A4);
-  //    ourCar.lightB = analogRead(A5);
-  //    lightA = ourCar.lightA;
-  //    lightB = ourCar.lightB;
-  //    ourCar.clockwise();
-  //    delay(1000);
-  //  }
-  //  while (lightA <= thLight && lightB <= thLight)
-  //  {
-  //    //         Serial.print("REVERSE");
-  //    ourCar.lightA = analogRead(A4);
-  //    ourCar.lightB = analogRead(A5);
-  //
-  //    lightA = ourCar.lightA;
-  //    lightB = ourCar.lightB;
-  //    ourCar.moveOpposite();
-  //    delay(1000);
-  //  }
-  //
-  //  while (lightA > thLight && lightB <= thLight)
-  //  {
-  //    ourCar.lightA = analogRead(A4);
-  //    ourCar.lightB = analogRead(A5);
-  //    lightA = ourCar.lightA;
-  //    lightB = ourCar.lightB;
-  //    ourCar.counterclockwise();
-  //  }
+//    //running into the boundary
+//    if (lightA >= thLightA && lightB < thLightB)
+//    {
+//      Serial.println("~~~~BOOM!~~~~~");
+//      ourCar.moveOpposite();
+//      delay(1000);
+//    }
+//    if (lightA >= thLightA && lightB >= thLightB)
+//    {
+//      Serial.println("~~~~BOOM!~~~~~");
+//      ourCar.moveOpposite();
+//      delay(1000);
+//    }
+//  
+//    if (lightA < thLightA && lightB >= thLightB)
+//    {
+//       Serial.println("~~~~BOOM!~~~~~");
+//       ourCar.moveOpposite();
+//       delay(1000);
+//    }
 
 }
 
